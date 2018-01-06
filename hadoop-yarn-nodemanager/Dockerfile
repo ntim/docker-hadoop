@@ -1,2 +1,2 @@
-FROM ntim/hadoop-base
+FROM ntim/hadoop-yarn-resourcemanager
 ENTRYPOINT ["yarn", "nodemanager"]
