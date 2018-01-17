@@ -6,6 +6,7 @@ ENV HADOOP_VERSION 2.9.0
 RUN wget -q -O - "http://archive.apache.org/dist/hadoop/core/hadoop-$HADOOP_VERSION/hadoop-$HADOOP_VERSION.tar.gz" | gunzip | tar -x -C /usr/local 
 # Set hadoop home environment variable and add to path
 ENV HADOOP_HOME /usr/local/hadoop-$HADOOP_VERSION
+ENV HADOOP_CONF_DIR $HADOOP_HOME/etc/hadoop
 ENV PATH $PATH:${HADOOP_HOME}/bin
 # Create a symlink to /usr/local/hadoop
 RUN ln -s $HADOOP_HOME /usr/local/hadoop
