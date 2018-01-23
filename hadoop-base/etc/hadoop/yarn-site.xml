@@ -18,9 +18,31 @@
 
 <configuration>
 
-	<property>
-		<name>yarn.resourcemanager.hostname</name>
-		<value>resourcemanager</value>
-	</property>
-	
+  <property>
+    <name>yarn.resourcemanager.hostname</name>
+    <value>yarn-resourcemanager</value>
+  </property>
+
+  <property>
+    <name>yarn.resourcemanager.bind-host</name>
+    <value>0.0.0.0</value>
+  </property>
+
+  <property>
+    <name>yarn.nodemanager.bind-host</name>
+    <value>0.0.0.0</value>
+  </property>
+
+  <property>
+    <name>yarn.log-aggregation-enable</name>
+    <value>true</value>
+    <description>Enable log aggregation on HDFS</description>
+  </property>
+
+  <property>
+    <name>yarn.log-aggregation.retain-seconds</name>
+    <value>604800</value>
+    <description>Retain logs on HDFS for one week</description>
+  </property>
+  
 </configuration>

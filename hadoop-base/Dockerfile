@@ -1,5 +1,7 @@
-FROM openjdk:8-jre-slim
-RUN apt-get update && apt-get install -y wget && rm -rf /var/lib/apt/lists/*
+FROM centos:centos7.4.1708
+RUN yum install -y java-1.8.0-openjdk wget which exec && yum clean all
+# Set java home
+ENV JAVA_HOME /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.151-5.b12.el7_4.x86_64/jre/
 # Set the hadoop version
 ENV HADOOP_VERSION 2.9.0
 # Download hadoop and unpack in /usr/local

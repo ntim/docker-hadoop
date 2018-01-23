@@ -18,14 +18,14 @@
 
 <configuration>
 
-	<property>
-		<name>fs.defaultFS</name>
-		<value>hdfs://namenode</value>
-	</property>
+  <property>
+    <name>fs.defaultFS</name>
+    <value>hdfs://hdfs-namenode</value>
+  </property>
 
   <property>
     <name>hadoop.tmp.dir</name>
     <value>/var/hadoop</value>
   </property>
-	
+  
 </configuration>

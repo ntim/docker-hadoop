@@ -1,59 +1,63 @@
-version: "3.3"
+version: "3.4"
 
 services:
-  namenode:
-    image: ntim/hadoop-hdfs-namenode
+  hdfs-namenode:
+    image: ntim/hadoop-hdfs-namenode:latest
+    hostname: hdfs-namenode
     networks:
       - backend
     volumes:
-      - namenode:/var/hadoop
+      - hdfs-namenode:/var/hadoop
     ports:
       - 8020:8020
       - 50070:50070
-    deploy:
-      restart_policy:
-        condition: on-failure
-  datanode:
-    image: ntim/hadoop-hdfs-datanode
+  hdfs-datanode:
+    image: ntim/hadoop-hdfs-datanode:latest
     networks:
       - backend
+    ports:
+      - 50075:50075
     volumes:
-      - datanode:/var/hadoop
+      - hdfs-datanode:/var/hadoop
     deploy:
       mode: global
-      restart_policy:
-        condition: on-failure
-  resourcemanager:
-    image: ntim/hadoop-yarn-resourcemanager
+  yarn-resourcemanager:
+    image: ntim/hadoop-yarn-resourcemanager:latest
+    hostname: yarn-resourcemanager
     networks:
       - backend
     ports:
       - 8088:8088
-    deploy:
-      restart_policy:
-        condition: on-failure
-  nodemanager:
-    image: ntim/hadoop-yarn-nodemanager
+  yarn-nodemanager:
+    image: ntim/hadoop-yarn-nodemanager:latest
+    networks:
+      - backend
+    ports:
+      - 8042:8042
     deploy:
       mode: global
-      restart_policy:
-        condition: on-failure
+    volumes:
+      - yarn-nodemanager-logs:/usr/local/hadoop/logs
   zeppelin:
-    image: ntim/zeppelin
+    image: ntim/zeppelin:latest
+    hostname: zeppelin
     environment:
-      - SPARK_MASTER=yarn
+      - MASTER=yarn
     networks:
       - backend
     ports:
       - 8080:8080
     volumes:
-      - zeppelin_notebooks:/usr/local/zeppelin/notebook
+      - zeppelin-notebooks:/usr/local/zeppelin/notebook
+      - zeppelin-logs:/usr/local/zeppelin/logs
 
 networks:
   backend:
     attachable: true
 
 volumes:
-  namenode:
-  datanode:
-  zeppelin_notebooks:
+  hdfs-namenode:
+  hdfs-datanode:
+  yarn-nodemanager-logs:
+  zeppelin-notebooks:
+  zeppelin-logs:
