@@ -37,5 +37,15 @@
     <name>dfs.namenode.https-bind-host</name>
     <value>0.0.0.0</value>
   </property>
+
+  <property>
+    <name>dfs.namenode.backup.address</name>
+    <value>backupnode:50100</value>
+  </property>
+
+  <property>
+    <name>dfs.namenode.backup.http-address</name>
+    <value>backupnode:50105</value>
+  </property>
   
 </configuration>

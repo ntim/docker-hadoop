@@ -20,7 +20,7 @@
 
   <property>
     <name>yarn.resourcemanager.hostname</name>
-    <value>yarn-resourcemanager</value>
+    <value>resourcemanager</value>
   </property>
 
   <property>
