@@ -1,46 +1,73 @@
 version: "3.4"
 
 services:
-  hdfs-namenode:
-    image: ntim/hadoop-hdfs-namenode:latest
-    hostname: hdfs-namenode
+  namenode:
+    image: ntim/hadoop-hdfs-namenode:2.9.0
+    hostname: namenode
     networks:
       - backend
     volumes:
-      - hdfs-namenode:/var/hadoop
+      - namenode:/var/hadoop
     ports:
       - 8020:8020
       - 50070:50070
-  hdfs-datanode:
-    image: ntim/hadoop-hdfs-datanode:latest
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+  backupnode:
+    image: ntim/hadoop-hdfs-backupnode:2.9.0
+    hostname: backupnode
+    networks:
+      - backend
+    volumes:
+      - backupnode:/var/hadoop
+    ports:
+      - 50105:50105
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+  datanode:
+    image: ntim/hadoop-hdfs-datanode:2.9.0
+    # Set the hostname to something unique to prevent data corruption after restarts due to a chaning hostname.
+    hostname: "datanode-{{ .Node.ID }}"
     networks:
       - backend
     ports:
       - 50075:50075
     volumes:
-      - hdfs-datanode:/var/hadoop
+      - datanode:/var/hadoop
     deploy:
       mode: global
-  yarn-resourcemanager:
-    image: ntim/hadoop-yarn-resourcemanager:latest
-    hostname: yarn-resourcemanager
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+  resourcemanager:
+    image: ntim/hadoop-yarn-resourcemanager:2.9.0
     networks:
       - backend
     ports:
       - 8088:8088
-  yarn-nodemanager:
-    image: ntim/hadoop-yarn-nodemanager:latest
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+  nodemanager:
+    image: ntim/hadoop-yarn-nodemanager:2.9.0
     networks:
       - backend
     ports:
       - 8042:8042
     deploy:
       mode: global
+      restart_policy:
+        condition: on-failure
+        delay: 5s
     volumes:
-      - yarn-nodemanager-logs:/usr/local/hadoop/logs
+      - nodemanager_logs:/usr/share/hadoop/logs
   zeppelin:
-    image: ntim/zeppelin:latest
-    hostname: zeppelin
+    image: ntim/zeppelin:0.7.3
     environment:
       - MASTER=yarn
     networks:
@@ -48,16 +75,17 @@ services:
     ports:
       - 8080:8080
     volumes:
-      - zeppelin-notebooks:/usr/local/zeppelin/notebook
-      - zeppelin-logs:/usr/local/zeppelin/logs
+      - zeppelin_notebooks:/usr/local/zeppelin/notebook
+      - zeppelin_logs:/usr/local/zeppelin/logs
 
 networks:
   backend:
     attachable: true
 
 volumes:
-  hdfs-namenode:
-  hdfs-datanode:
-  yarn-nodemanager-logs:
-  zeppelin-notebooks:
-  zeppelin-logs:
+  namenode:
+  backupnode:
+  datanode:
+  nodemanager_logs:
+  zeppelin_notebooks:
+  zeppelin_logs:
