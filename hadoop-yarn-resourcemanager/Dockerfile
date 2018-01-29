@@ -1,4 +1,5 @@
-FROM ntim/hadoop-yarn-base
+FROM ntim/hadoop-yarn-base:2.9.0
+USER yarn
 # Web
 EXPOSE 8088
 # Web Https
